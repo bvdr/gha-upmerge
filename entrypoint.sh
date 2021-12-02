@@ -42,7 +42,7 @@ echo
 set -o xtrace
 
 # Do the merge
-git merge --no-ff --no-edit $INPUT_FROM_BRANCH
+git merge $INPUT_FROM_BRANCH --no-commit
 
 # Push the branch
-git push --force origin $INPUT_TO_BRANCH
+git push
