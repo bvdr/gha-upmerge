@@ -17,17 +17,14 @@ if [[ -z "${!INPUT_PUSH_TOKEN}" ]]; then
   exit 1
 fi
 
-git remote set-url origin https://x-access-token:${!INPUT_PUSH_TOKEN}@github.com/$GITHUB_REPOSITORY.git
+git clone https://x-access-token:${!INPUT_PUSH_TOKEN}@github.com/$GITHUB_REPOSITORY.git remote && cd remote
 git config --global user.name "$INPUT_USER_NAME"
 git config --global user.email "$INPUT_USER_EMAIL"
 
 set -o xtrace
 
-git fetch origin $INPUT_FROM_BRANCH
-(git checkout $INPUT_FROM_BRANCH && git pull)||git checkout -b $INPUT_FROM_BRANCH origin/$INPUT_FROM_BRANCH
-
-git fetch origin $INPUT_TO_BRANCH
-(git checkout $INPUT_TO_BRANCH && git pull)||git checkout -b $INPUT_TO_BRANCH origin/$INPUT_TO_BRANCH
+git checkout $INPUT_FROM_BRANCH && git pull
+git checkout $INPUT_TO_BRANCH && git pull
 
 if git merge-base --is-ancestor $INPUT_FROM_BRANCH $INPUT_TO_BRANCH; then
   echo "No merge is necessary"
